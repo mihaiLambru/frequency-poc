@@ -1,19 +1,15 @@
 import {
   Checkbox,
   DatePicker,
-  Dropdown,
   Form,
   Input,
   Modal,
   Radio,
   Select,
-  Space,
   Typography,
 } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
-
-type Frequency = dayjs.Dayjs;
 
 const Greta = ({
   isOpen,
@@ -22,7 +18,6 @@ const Greta = ({
   onClose: () => void;
   isOpen: boolean;
 }) => {
-  const [frequencies, setFrecuencies] = useState<Frequency[]>([dayjs()]);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
 
   const onSelectChange = (value: string) => {
@@ -116,9 +111,6 @@ const Greta = ({
               />
             </div>
           </Radio.Group>
-          {frequencies.map(() => (
-            <></>
-          ))}
           <br />
           <Typography>How long before it is Overdue?</Typography>
           <DatePicker placeholder="Select length of time" />

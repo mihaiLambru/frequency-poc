@@ -12,23 +12,6 @@ import {
   Typography,
 } from "antd";
 
-const WeekDay = ({ children }: any) => (
-  <div
-    style={{
-      border: "1px solid black",
-      borderRadius: 100,
-      padding: 4,
-      width: 21,
-      height: 21,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    }}
-  >
-    {children}
-  </div>
-);
-
 const Francesco = ({
   isOpen,
   onClose,
