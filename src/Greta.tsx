@@ -19,6 +19,7 @@ const Greta = ({
   isOpen: boolean;
 }) => {
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  const [_, rerender] = useState(0);
 
   const onSelectChange = (value: string) => {
     if (value === "custom") {
@@ -31,6 +32,37 @@ const Greta = ({
     console.log(values);
     setIsSecondModalOpen(false);
   };
+  const [form] = Form.useForm();
+
+  const renderCustom = () => {
+    switch (secondForm.getFieldValue("repeatType")) {
+      case "d":
+        return <div />;
+      case "w":
+        return (
+          <Form.Item name="weeksCheckbox">
+            <Checkbox.Group>
+              <div style={{ display: "flex", gap: 4 }}>
+                <Checkbox value="M">M</Checkbox>
+                <Checkbox value="Tu">Tu</Checkbox>
+                <Checkbox value="We">We</Checkbox>
+                <Checkbox value="Th">Th</Checkbox>
+                <Checkbox value="F">F</Checkbox>
+                <Checkbox value="Sa">Sa</Checkbox>
+                <Checkbox value="Su">Su</Checkbox>
+              </div>
+            </Checkbox.Group>
+          </Form.Item>
+        );
+      case "m":
+        return (
+          <Radio.Group>
+            <Radio>On day 7</Radio>
+            <Radio>On the second Tuesday</Radio>
+          </Radio.Group>
+        );
+    }
+  };
 
   return (
     <>
@@ -40,7 +72,7 @@ const Greta = ({
         title={"Add a new To-Do"}
         open={isOpen}
       >
-        <Form>
+        <Form form={form}>
           <Typography>Is this a recurring To-Do?</Typography>
           <Radio>Yes</Radio>
           <Radio>No</Radio>
@@ -54,63 +86,90 @@ const Greta = ({
           <Typography>Frequency</Typography>
           <br />
           <br />
-          <Radio.Group style={{ display: "flex", flexDirection: "column" }}>
-            <Radio value="every" style={{ width: "100%", display: "block" }}>
-              Every <Input style={{ width: 65 }} type="number" /> hour(s)
-              starting at
-              <DatePicker />
-            </Radio>
-            <Radio
-              value="at"
-              style={{ width: "100%", display: "block" }}
-            ></Radio>
-            <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-              <Typography>At</Typography>
-              <Form.List initialValue={[dayjs()]} name="time">
-                {(fields, { add, remove }) => (
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    {fields.map(({ key, name, ...restField }, index) => (
-                      <DatePicker
-                        defaultValue={dayjs()}
-                        key={key}
-                        onChange={(value) => {
-                          if (!value) {
-                            remove(index);
-                          }
-                        }}
-                      />
-                    ))}
-                    <PlusButton onClick={add} />
-                  </div>
-                )}
-              </Form.List>
-              <Select
-                defaultValue={"1"}
-                onChange={onSelectChange}
-                style={{
-                  width: 113,
-                }}
-                options={[
-                  {
-                    value: "1",
-                    label: "1 day",
-                  },
-                  {
-                    value: "2",
-                    label: "2 day",
-                  },
-                  {
-                    value: "3",
-                    label: "3 day",
-                  },
-                  {
-                    value: "custom",
-                    label: "Custom",
-                  },
-                ]}
-              />
-            </div>
-          </Radio.Group>
+          <Form.Item name="freq">
+            <Radio.Group style={{ display: "flex", flexDirection: "column" }}>
+              <Radio
+                onChange={() => rerender(1)}
+                value="every"
+                style={{ width: "100%", display: "block" }}
+              >
+                Every <Input style={{ width: 65 }} type="number" /> hour(s)
+                starting at
+                <DatePicker />
+              </Radio>
+              {form.getFieldValue("freq") === "every" && (
+                <Typography color="#1890FF" style={{ color: "#1890FF" }}>
+                  ToDo will occur every [in the final interface we will spell
+                  out the recurrence]
+                </Typography>
+              )}
+              <Radio
+                onChange={() => rerender(2)}
+                value="at"
+                style={{ width: "100%", display: "block" }}
+              ></Radio>
+              <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+                <Typography>At</Typography>
+                <Form.List initialValue={[dayjs()]} name="time">
+                  {(fields, { add, remove }) => (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {fields.map(({ key, name, ...restField }, index) => (
+                        <DatePicker.TimePicker
+                          defaultValue={dayjs()}
+                          key={key}
+                          onChange={(value) => {
+                            if (!value) {
+                              remove(index);
+                            }
+                          }}
+                        />
+                      ))}
+                      <PlusButton onClick={add} />
+                    </div>
+                  )}
+                </Form.List>
+                <Select
+                  defaultValue={"d"}
+                  onChange={onSelectChange}
+                  style={{
+                    width: 113,
+                  }}
+                  options={[
+                    {
+                      value: "d",
+                      label: "Day",
+                    },
+                    {
+                      value: "w",
+                      label: "Week",
+                    },
+                    {
+                      value: "2w",
+                      label: "2 Weeks",
+                    },
+                    {
+                      value: "4w",
+                      label: "4 Weeks",
+                    },
+                    {
+                      value: "m",
+                      label: "month",
+                    },
+                    {
+                      value: "custom",
+                      label: "Custom",
+                    },
+                  ]}
+                />
+              </div>
+              {form.getFieldValue("freq") === "at" && (
+                <Typography color="#1890FF" style={{ color: "#1890FF" }}>
+                  ToDo will occur every [in the final interface we will spell
+                  out the recurrence]
+                </Typography>
+              )}
+            </Radio.Group>
+          </Form.Item>
           <br />
           <Typography>How long before it is Overdue?</Typography>
           <DatePicker placeholder="Select length of time" />
@@ -131,7 +190,7 @@ const Greta = ({
             <DatePicker />
           </Form.Item>
           <Typography>Time</Typography>
-          <Form.List initialValue={[dayjs()]} name="time">
+          <Form.List initialValue={form.getFieldValue("time")} name="time">
             {(fields, { add, remove }) => (
               <div style={{ display: "flex" }}>
                 {fields.map(({ key, name, ...restField }, index) => (
@@ -158,22 +217,21 @@ const Greta = ({
                 <Input type="number" style={{ width: 65 }} />
               </Form.Item>
               <Form.Item initialValue={"w"} name={"repeatType"}>
-                <Select options={[{ label: "weeks", value: "w" }]} />
+                <Select
+                  options={[
+                    { label: "Days", value: "d" },
+                    { label: "Weeks", value: "w" },
+                    { label: "Months", value: "m" },
+                  ]}
+                />
               </Form.Item>
             </div>
-            <Form.Item name="weeksCheckbox">
-              <Checkbox.Group>
-                <div style={{ display: "flex", gap: 4 }}>
-                  <Checkbox value="M">M</Checkbox>
-                  <Checkbox value="Tu">Tu</Checkbox>
-                  <Checkbox value="We">We</Checkbox>
-                  <Checkbox value="Th">Th</Checkbox>
-                  <Checkbox value="F">F</Checkbox>
-                  <Checkbox value="Sa">Sa</Checkbox>
-                  <Checkbox value="Su">Su</Checkbox>
-                </div>
-              </Checkbox.Group>
-            </Form.Item>
+            {renderCustom()}
+            <br />
+            <Typography color="#1890FF" style={{ color: "#1890FF" }}>
+              ToDo will occur every [in the final interface we will spell out
+              the recurrence]
+            </Typography>
           </div>
         </Form>
       </Modal>
