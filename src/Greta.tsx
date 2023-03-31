@@ -20,6 +20,7 @@ const Greta = ({
 }) => {
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [_, rerender] = useState(0);
+  const [repeatType, setRepeatType] = useState<"d" | "w" | "m">("d");
 
   const onSelectChange = (value: string) => {
     if (value === "custom") {
@@ -35,7 +36,7 @@ const Greta = ({
   const [form] = Form.useForm();
 
   const renderCustom = () => {
-    switch (secondForm.getFieldValue("repeatType")) {
+    switch (repeatType) {
       case "d":
         return <div />;
       case "w":
@@ -216,8 +217,9 @@ const Greta = ({
               <Form.Item initialValue={1} name="repeatEveryDayNumber">
                 <Input type="number" style={{ width: 65 }} />
               </Form.Item>
-              <Form.Item initialValue={"w"} name={"repeatType"}>
+              <Form.Item initialValue={"d"} name={"repeatType"}>
                 <Select
+                  onChange={(value) => setRepeatType(value)}
                   options={[
                     { label: "Days", value: "d" },
                     { label: "Weeks", value: "w" },
