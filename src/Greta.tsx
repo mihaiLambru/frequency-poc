@@ -197,27 +197,25 @@ const Greta = ({
             <DatePicker />
           </Form.Item>
           <Typography>Time</Typography>
-          {isSecondModalOpen && (
-            <Form.List name="time">
-              {(fields, { add, remove }) => (
-                <div style={{ display: "flex" }}>
-                  {fields.map(({ key, name, ...restField }, index) => (
-                    <Form.Item key={key} {...restField}>
-                      <DatePicker.TimePicker
-                        format={"HH:mm"}
-                        onChange={(value: any) => {
-                          if (!value) {
-                            remove(index);
-                          }
-                        }}
-                      />
-                    </Form.Item>
-                  ))}
-                  <PlusButton style={{ marginTop: 9 }} onClick={add} />
-                </div>
-              )}
-            </Form.List>
-          )}
+          <Form.List name="time">
+            {(fields, { add, remove }) => (
+              <div style={{ display: "flex" }}>
+                {fields.map(({ key, name, ...restField }, index) => (
+                  <Form.Item key={key} {...restField}>
+                    <DatePicker.TimePicker
+                      format={"HH:mm"}
+                      onChange={(value: any) => {
+                        if (!value) {
+                          remove(index);
+                        }
+                      }}
+                    />
+                  </Form.Item>
+                ))}
+                <PlusButton style={{ marginTop: 9 }} onClick={add} />
+              </div>
+            )}
+          </Form.List>
           <br />
           <div>
             <div style={{ display: "flex", gap: 15 }}>
