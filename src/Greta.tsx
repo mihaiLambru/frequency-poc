@@ -19,11 +19,13 @@ const Greta = ({
   isOpen: boolean;
 }) => {
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, rerender] = useState(0);
   const [repeatType, setRepeatType] = useState<"d" | "w" | "m">("d");
 
   const onSelectChange = (value: string) => {
     if (value === "custom") {
+      secondForm.setFieldValue("time", form.getFieldValue("time"));
       setIsSecondModalOpen(true);
     }
   };
@@ -116,9 +118,10 @@ const Greta = ({
                     <div style={{ display: "flex", alignItems: "center" }}>
                       {fields.map(({ key, name, ...restField }, index) => (
                         <DatePicker.TimePicker
+                          format={"HH:mm"}
                           defaultValue={dayjs()}
                           key={key}
-                          onChange={(value) => {
+                          onChange={(value: any) => {
                             if (!value) {
                               remove(index);
                             }
@@ -181,7 +184,10 @@ const Greta = ({
       </Modal>
       <Modal
         onCancel={() => setIsSecondModalOpen(false)}
-        onOk={() => secondForm.submit()}
+        onOk={() => {
+          form.setFieldValue("time", secondForm.getFieldValue("time"));
+          secondForm.submit();
+        }}
         cancelText={"Cancel"}
         title={"Add a new To-Do"}
         open={isSecondModalOpen}
@@ -191,25 +197,27 @@ const Greta = ({
             <DatePicker />
           </Form.Item>
           <Typography>Time</Typography>
-          <Form.List initialValue={form.getFieldValue("time")} name="time">
-            {(fields, { add, remove }) => (
-              <div style={{ display: "flex" }}>
-                {fields.map(({ key, name, ...restField }, index) => (
-                  <Form.Item key={key} {...restField}>
-                    <DatePicker.TimePicker
-                      format={"HH:mm"}
-                      onChange={(value) => {
-                        if (!value) {
-                          remove(index);
-                        }
-                      }}
-                    />
-                  </Form.Item>
-                ))}
-                <PlusButton style={{ marginTop: 9 }} onClick={add} />
-              </div>
-            )}
-          </Form.List>
+          {isSecondModalOpen && (
+            <Form.List name="time">
+              {(fields, { add, remove }) => (
+                <div style={{ display: "flex" }}>
+                  {fields.map(({ key, name, ...restField }, index) => (
+                    <Form.Item key={key} {...restField}>
+                      <DatePicker.TimePicker
+                        format={"HH:mm"}
+                        onChange={(value: any) => {
+                          if (!value) {
+                            remove(index);
+                          }
+                        }}
+                      />
+                    </Form.Item>
+                  ))}
+                  <PlusButton style={{ marginTop: 9 }} onClick={add} />
+                </div>
+              )}
+            </Form.List>
+          )}
           <br />
           <div>
             <div style={{ display: "flex", gap: 15 }}>
