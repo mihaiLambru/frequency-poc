@@ -19,18 +19,25 @@ const Greta = ({
   isOpen: boolean;
 }) => {
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, rerender] = useState(0);
   const [repeatType, setRepeatType] = useState<"d" | "w" | "m">("d");
 
   const onSelectChange = (value: string) => {
     if (value === "custom") {
+      const timeFieldValue: dayjs.Dayjs[] = form.getFieldValue("time");
+      secondForm.setFieldValue("secondFormTimeList", timeFieldValue);
+      console.log(timeFieldValue);
+
       setIsSecondModalOpen(true);
     }
   };
 
   const [secondForm] = Form.useForm();
   const onSubmitSecondForm = (values: SecondFormType) => {
-    console.log(values);
+    const secondFormTime = values.secondFormTimeList;
+    form.setFieldValue("time", secondFormTime);
+
     setIsSecondModalOpen(false);
   };
   const [form] = Form.useForm();
@@ -109,59 +116,80 @@ const Greta = ({
                 value="at"
                 style={{ width: "100%", display: "block" }}
               ></Radio>
-              <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-                <Typography>At</Typography>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 20,
+                }}
+              >
                 <Form.List initialValue={[dayjs()]} name="time">
                   {(fields, { add, remove }) => (
-                    <div style={{ display: "flex", alignItems: "center" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        flexWrap: "wrap",
+                      }}
+                    >
                       {fields.map(({ key, name, ...restField }, index) => (
-                        <DatePicker.TimePicker
-                          defaultValue={dayjs()}
+                        <Form.Item
+                          label={index === 0 && "At"}
                           key={key}
-                          onChange={(value) => {
-                            if (!value) {
-                              remove(index);
-                            }
-                          }}
-                        />
+                          name={[name, "timePicker"]}
+                          {...restField}
+                        >
+                          <DatePicker.TimePicker
+                            format={"HH:mm"}
+                            onChange={(value: any) => {
+                              if (!value) {
+                                remove(index);
+                              }
+                            }}
+                          />
+                        </Form.Item>
                       ))}
-                      <PlusButton onClick={add} />
+                      <Form.Item>
+                        <PlusButton onClick={() => add()} />
+                      </Form.Item>
                     </div>
                   )}
                 </Form.List>
-                <Select
-                  defaultValue={"d"}
-                  onChange={onSelectChange}
-                  style={{
-                    width: 113,
-                  }}
-                  options={[
-                    {
-                      value: "d",
-                      label: "Day",
-                    },
-                    {
-                      value: "w",
-                      label: "Week",
-                    },
-                    {
-                      value: "2w",
-                      label: "2 Weeks",
-                    },
-                    {
-                      value: "4w",
-                      label: "4 Weeks",
-                    },
-                    {
-                      value: "m",
-                      label: "month",
-                    },
-                    {
-                      value: "custom",
-                      label: "Custom",
-                    },
-                  ]}
-                />
+                <Form.Item>
+                  <Select
+                    defaultValue={"d"}
+                    onChange={onSelectChange}
+                    style={{
+                      width: 113,
+                    }}
+                    options={[
+                      {
+                        value: "d",
+                        label: "Day",
+                      },
+                      {
+                        value: "w",
+                        label: "Week",
+                      },
+                      {
+                        value: "2w",
+                        label: "2 Weeks",
+                      },
+                      {
+                        value: "4w",
+                        label: "4 Weeks",
+                      },
+                      {
+                        value: "m",
+                        label: "month",
+                      },
+                      {
+                        value: "custom",
+                        label: "Custom",
+                      },
+                    ]}
+                  />
+                </Form.Item>
               </div>
               {form.getFieldValue("freq") === "at" && (
                 <Typography color="#1890FF" style={{ color: "#1890FF" }}>
@@ -181,7 +209,9 @@ const Greta = ({
       </Modal>
       <Modal
         onCancel={() => setIsSecondModalOpen(false)}
-        onOk={() => secondForm.submit()}
+        onOk={() => {
+          secondForm.submit();
+        }}
         cancelText={"Cancel"}
         title={"Add a new To-Do"}
         open={isSecondModalOpen}
@@ -191,24 +221,35 @@ const Greta = ({
             <DatePicker />
           </Form.Item>
           <Typography>Time</Typography>
-          <Form.List initialValue={form.getFieldValue("time")} name="time">
-            {(fields, { add, remove }) => (
-              <div style={{ display: "flex" }}>
-                {fields.map(({ key, name, ...restField }, index) => (
-                  <Form.Item key={key} {...restField}>
-                    <DatePicker.TimePicker
-                      format={"HH:mm"}
-                      onChange={(value) => {
-                        if (!value) {
-                          remove(index);
-                        }
-                      }}
+          <Form.List name="secondFormTimeList">
+            {(fields, { add, remove }) => {
+              return (
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                  {fields.map(({ key, name, ...restField }, index) => (
+                    <Form.Item
+                      {...restField}
+                      key={key}
+                      name={[name, "timePicker"]}
+                    >
+                      <DatePicker.TimePicker
+                        format={"HH:mm"}
+                        onChange={(value: any) => {
+                          if (!value) {
+                            remove(index);
+                          }
+                        }}
+                      />
+                    </Form.Item>
+                  ))}
+                  <Form.Item>
+                    <PlusButton
+                      style={{ marginTop: 9 }}
+                      onClick={() => add()}
                     />
                   </Form.Item>
-                ))}
-                <PlusButton style={{ marginTop: 9 }} onClick={add} />
-              </div>
-            )}
+                </div>
+              );
+            }}
           </Form.List>
           <br />
           <div>
@@ -246,6 +287,7 @@ type SecondFormType = {
   weeksCheckbox: ("M" | "Tu" | "We" | "Th" | "F" | "Sa" | "Su")[];
   repeatEveryDayNumber: number;
   repeatType: "w";
+  secondFormTimeList: dayjs.Dayjs[];
 };
 
 const PlusButton = ({
