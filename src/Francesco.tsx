@@ -123,7 +123,7 @@ const Francesco = ({
           <Form.Item label={"No end date"}>
             <Checkbox />
           </Form.Item>
-          <Space />
+
           <Typography>Frequency</Typography>
           <Select
             onChange={(value) => setFrequency(value)}
@@ -156,6 +156,9 @@ const Francesco = ({
           <br />
           {renderFrequencyInputs()}
         </Form>
+        <br />
+        <Typography>How long before it is Overdue?</Typography>
+        <TimePicker placeholder="Select length of time" format={"HH:mm"} />
       </Modal>
     </div>
   );

@@ -6,6 +6,7 @@ import {
   Modal,
   Radio,
   Select,
+  TimePicker,
   Typography,
 } from "antd";
 import { useState } from "react";
@@ -81,18 +82,18 @@ const Greta = ({
         open={isOpen}
       >
         <Form form={form}>
-          <Typography>Is this a recurring To-Do?</Typography>
-          <Radio>Yes</Radio>
-          <Radio>No</Radio>
-          <br />
-          <br />
-          <Typography>When should it first start?</Typography>
-          <DatePicker />
-          <br />
-          <br />
-          <br />
+        <Typography>Is this a recurring To-Do?</Typography>
+          <Radio.Group value={1}>
+            <Radio value={1}>Yes</Radio>
+            <Radio value={2}>No</Radio>
+          </Radio.Group>
+          <br /> <br />
+          <Typography>Select start and end date</Typography>
+          <DatePicker.RangePicker />
+          <Form.Item label={"No end date"}>
+            <Checkbox />
+          </Form.Item>
           <Typography>Frequency</Typography>
-          <br />
           <br />
           <Form.Item name="freq">
             <Radio.Group style={{ display: "flex", flexDirection: "column" }}>
@@ -101,21 +102,23 @@ const Greta = ({
                 value="every"
                 style={{ width: "100%", display: "block" }}
               >
-                Every <Input style={{ width: 65 }} type="number" /> hour(s)
-                starting at
-                <DatePicker />
+                {'Every '}
+                <Input style={{ width: 65 }} type="number" />
+                {' hour(s), starting at '}
+                <TimePicker format={"HH:mm"}/>
               </Radio>
-              {form.getFieldValue("freq") === "every" && (
+              {/* {form.getFieldValue("freq") === "every" && (
                 <Typography color="#1890FF" style={{ color: "#1890FF" }}>
                   ToDo will occur every [in the final interface we will spell
                   out the recurrence]
                 </Typography>
-              )}
+              )} */}
               <Radio
                 onChange={() => rerender(2)}
                 value="at"
                 style={{ width: "100%", display: "block" }}
-              ></Radio>
+              >
+              </Radio>
               <div
                 style={{
                   display: "flex",
@@ -156,6 +159,7 @@ const Greta = ({
                   )}
                 </Form.List>
                 <Form.Item>
+                  {'Every '}
                   <Select
                     defaultValue={"d"}
                     onChange={onSelectChange}
@@ -191,20 +195,18 @@ const Greta = ({
                   />
                 </Form.Item>
               </div>
-              {form.getFieldValue("freq") === "at" && (
+
+              {/* {form.getFieldValue("freq") === "at" && (
                 <Typography color="#1890FF" style={{ color: "#1890FF" }}>
                   ToDo will occur every [in the final interface we will spell
                   out the recurrence]
                 </Typography>
-              )}
+              )} */}
             </Radio.Group>
           </Form.Item>
           <br />
           <Typography>How long before it is Overdue?</Typography>
-          <DatePicker placeholder="Select length of time" />
-          <Typography>Is there an end date?</Typography>
-          <Radio>Yes</Radio>
-          <Radio>No</Radio>
+          <TimePicker placeholder="Select length of time" format={"HH:mm"} />
         </Form>
       </Modal>
       <Modal
