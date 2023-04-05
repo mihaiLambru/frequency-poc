@@ -218,13 +218,11 @@ const Greta = ({
         title={"Add a new To-Do"}
         open={isSecondModalOpen}
       >
-        <Form layout="vertical" form={secondForm} onFinish={onSubmitSecondForm}>
-          {/* <Form.Item initialValue={dayjs()} name="startDate"> */}
+        <Form form={secondForm} onFinish={onSubmitSecondForm}>
           <Typography>Select start and end date</Typography>
           <DatePicker.RangePicker />
-          {/* </Form.Item> */}
           <Form.Item label={"No end date"}>
-          <Checkbox />
+            <Checkbox />
           </Form.Item>
           <Typography>Time</Typography>
           <Form.List name="secondFormTimeList">
