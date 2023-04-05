@@ -31,17 +31,18 @@ const Francesco = ({
             {" hour(s), between "}
             <TimePicker.RangePicker format={"HH:mm"} />
             <br />
-            On
             <div style={{ marginRight: 5 }} />
+            <br />
             <Checkbox.Group>
-              <div style={{ display: "flex", gap: 4 }}>
-                <Checkbox value="M">M</Checkbox>
-                <Checkbox value="Tu">Tu</Checkbox>
-                <Checkbox value="We">We</Checkbox>
-                <Checkbox value="Th">Th</Checkbox>
-                <Checkbox value="F">F</Checkbox>
-                <Checkbox value="Sa">Sa</Checkbox>
-                <Checkbox value="Su">Su</Checkbox>
+              <div style={{ display: "flex", gap: 1 }}>
+                {'On: '}
+                <Checkbox value="M">Mon</Checkbox>
+                <Checkbox value="Tu">Tue</Checkbox>
+                <Checkbox value="We">Wed</Checkbox>
+                <Checkbox value="Th">Thu</Checkbox>
+                <Checkbox value="F">Fri</Checkbox>
+                <Checkbox value="Sa">Sat</Checkbox>
+                <Checkbox value="Su">Sun</Checkbox>
               </div>
             </Checkbox.Group>
           </>
@@ -62,19 +63,20 @@ const Francesco = ({
             <Input style={{ width: 60 }} type="number" />
             {" week(s)"}
             <br />
-            {"On "}
+            <br />
             <Checkbox.Group>
-              <div style={{ display: "flex", gap: 4 }}>
-                <Checkbox value="M">M</Checkbox>
-                <Checkbox value="Tu">Tu</Checkbox>
-                <Checkbox value="We">We</Checkbox>
-                <Checkbox value="Th">Th</Checkbox>
-                <Checkbox value="F">F</Checkbox>
-                <Checkbox value="Sa">Sa</Checkbox>
-                <Checkbox value="Su">Su</Checkbox>
+              <div style={{ display: "flex", gap: 1 }}>
+                {"On: "}
+                <Checkbox value="M">Mon</Checkbox>
+                <Checkbox value="Tu">Tue</Checkbox>
+                <Checkbox value="We">Wed</Checkbox>
+                <Checkbox value="Th">Thu</Checkbox>
+                <Checkbox value="F">Fri</Checkbox>
+                <Checkbox value="Sa">Sat</Checkbox>
+                <Checkbox value="Su">Sun</Checkbox>
               </div>
             </Checkbox.Group>
-            <br />
+            <br /><br />
             {"At "}
             <TimePicker format={"HH:mm"} />
           </>
@@ -93,6 +95,7 @@ const Francesco = ({
             <Radio> On the 3rd of each month</Radio>
             <br />
             <br />
+
             {"At "}
             <TimePicker format={"HH:mm"} />
           </>
@@ -157,6 +160,7 @@ const Francesco = ({
           <br />
           {renderFrequencyInputs()}
         </Form>
+        <br />
         <br />
         <Typography>How long before it is Overdue?</Typography>
         <TimePicker placeholder="Select length of time" format={"HH:mm"} />
