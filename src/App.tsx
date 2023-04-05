@@ -11,9 +11,9 @@ function App() {
   return (
     <>
       <Button onClick={() => setOpenedModal("Francesco")}>
-        Francesco's modal
+        Modal one
       </Button>
-      <Button onClick={() => setOpenedModal("Greta")}>Greta's modal</Button>
+      <Button onClick={() => setOpenedModal("Greta")}>Modal two</Button>
       <Francesco
         onClose={() => setOpenedModal(null)}
         isOpen={openedModal === "Francesco"}
