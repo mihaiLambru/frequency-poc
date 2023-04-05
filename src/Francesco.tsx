@@ -128,6 +128,7 @@ const Francesco = ({
           <Select
             onChange={(value) => setFrequency(value)}
             value={frequency}
+            style={{ minWidth: 120 }}
             options={[
               {
                 label: "Select frequency",
