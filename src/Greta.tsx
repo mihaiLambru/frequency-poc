@@ -8,6 +8,7 @@ import {
   Select,
   TimePicker,
   Typography,
+  Divider,
 } from "antd";
 import { useState } from "react";
 import dayjs from "dayjs";
@@ -93,8 +94,10 @@ const Greta = ({
           <Form.Item label={"No end date"}>
             <Checkbox />
           </Form.Item>
-          <Typography>Frequency</Typography>
-          <br />
+          <Divider orientation="left" orientationMargin="0" plain>
+          Frequency
+          </Divider>
+
           <Form.Item name="freq">
             <Radio.Group style={{ display: "flex", flexDirection: "column" }}>
               <Radio
@@ -185,7 +188,7 @@ const Greta = ({
                       },
                       {
                         value: "m",
-                        label: "month",
+                        label: "Month",
                       },
                       {
                         value: "custom",
@@ -204,10 +207,12 @@ const Greta = ({
               )} */}
             </Radio.Group>
           </Form.Item>
-          <br />
-          <Typography>How long before it is Overdue?</Typography>
-          <TimePicker placeholder="Select length of time" format={"HH:mm"} />
         </Form>
+        <Divider orientation="left" orientationMargin="0" plain>
+        Time to complete
+        </Divider>
+        <Typography>How long before it is Overdue?</Typography>
+        <TimePicker placeholder="Select length of time" format={"HH:mm"} />
       </Modal>
       <Modal
         onCancel={() => setIsSecondModalOpen(false)}
@@ -308,18 +313,22 @@ const PlusButton = ({
       backgroundColor: "#1890FF",
       color: "white",
       borderRadius: "100%",
-      width: 16,
-      height: 16,
-      fontSize: 19,
+      width: 24,
+      height: 24,
+      fontSize: 20,
       marginLeft: 8,
       display: "flex",
-      alignItems: "center",
+      alignItems: 'center',
       justifyContent: "center",
-      cursor: "pointer",
+      textAlign:"center",
       ...restProps.style,
     }}
   >
-    +
+    <p style={{
+      margin: 0,
+      padding: 0,
+      marginBottom: 3,
+       }}>+</p>
   </div>
 );
 
