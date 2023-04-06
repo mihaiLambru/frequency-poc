@@ -10,6 +10,7 @@ import {
   Space,
   TimePicker,
   Typography,
+  Divider,
 } from "antd";
 
 const Francesco = ({
@@ -33,9 +34,10 @@ const Francesco = ({
             <br />
             <div style={{ marginRight: 5 }} />
             <br />
+            {'On: '}
+            <br />
             <Checkbox.Group>
               <div style={{ display: "flex", gap: 1 }}>
-                {'On: '}
                 <Checkbox value="M">Mon</Checkbox>
                 <Checkbox value="Tu">Tue</Checkbox>
                 <Checkbox value="We">Wed</Checkbox>
@@ -64,9 +66,10 @@ const Francesco = ({
             {" week(s)"}
             <br />
             <br />
+            {"On: "}
+            <br />
             <Checkbox.Group>
               <div style={{ display: "flex", gap: 1 }}>
-                {"On: "}
                 <Checkbox value="M">Mon</Checkbox>
                 <Checkbox value="Tu">Tue</Checkbox>
                 <Checkbox value="We">Wed</Checkbox>
@@ -127,7 +130,9 @@ const Francesco = ({
             <Checkbox />
           </Form.Item>
 
-          <Typography>Frequency</Typography>
+          <Divider orientation="left" orientationMargin="0" plain>
+          Frequency
+          </Divider>
           <Select
             onChange={(value) => setFrequency(value)}
             value={frequency}
@@ -161,7 +166,9 @@ const Francesco = ({
           {renderFrequencyInputs()}
         </Form>
         <br />
-        <br />
+        <Divider orientation="left" orientationMargin="0" plain>
+        Time to complete
+        </Divider>
         <Typography>How long before it is Overdue?</Typography>
         <TimePicker placeholder="Select length of time" format={"HH:mm"} />
       </Modal>
